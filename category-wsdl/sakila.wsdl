@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="SakilaService"
+             targetNamespace="http://www.examples.com/sakila"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://www.examples.com/sakila"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xsd:schema targetNamespace="http://www.examples.com/sakila">
+      <xsd:element name="getFilmsByCategory">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="category" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="getFilmsByCategoryResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="films" type="tns:FilmList"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:complexType name="FilmList">
+        <xsd:sequence>
+          <xsd:element name="film" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+
+  <message name="getFilmsByCategoryRequest">
+    <part name="parameters" element="tns:getFilmsByCategory"/>
+  </message>
+
+  <message name="getFilmsByCategoryResponse">
+    <part name="parameters" element="tns:getFilmsByCategoryResponse"/>
+  </message>
+
+  <portType name="SakilaServicePortType">
+    <operation name="getFilmsByCategory">
+      <input message="tns:getFilmsByCategoryRequest"/>
+      <output message="tns:getFilmsByCategoryResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="SakilaServiceSoapBinding" type="tns:SakilaServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getFilmsByCategory">
+      <soap:operation soapAction="getFilmsByCategory"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="SakilaService">
+    <port name="SakilaServiceSoapPort" binding="tns:SakilaServiceSoapBinding">
+      <soap:address location="http://localhost:8000/wsdl"/>
+    </port>
+  </service>
+</definitions>

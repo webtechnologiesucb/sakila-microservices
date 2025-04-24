@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Lenguajes Sakila - Cliente Socket.IO</title>
+</head>
+<body>
+  <h2>Lenguajes de la base de datos Sakila</h2>
+  <ul id="lista-lenguajes"></ul>
+
+  <h3>Notificaciones en tiempo real</h3>
+  <ul id="notificaciones"></ul>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const socket = io("http://localhost:3000");
+    const lista = document.getElementById("notificaciones");
+    const listaLenguajes = document.getElementById("lista-lenguajes");
+
+    // Mostrar notificaciones
+    function notificar(mensaje) {
+      const item = document.createElement("li");
+      item.textContent = mensaje;
+      lista.appendChild(item);
+    }
+
+    // Obtener lenguajes desde el backend
+    async function cargarLenguajes() {
+      const res = await fetch("http://localhost:3000/languages");
+      const lenguajes = await res.json();
+      listaLenguajes.innerHTML = "";
+      lenguajes.forEach(l => {
+        const item = document.createElement("li");
+        item.textContent = `${l.language_id}. ${l.name}`;
+        listaLenguajes.appendChild(item);
+      });
+    }
+
+    socket.on("connect", () => {
+      notificar(`Conectado con ID: ${socket.id}`);
+      cargarLenguajes(); // cargar al conectar
+    });
+
+    socket.on("languageUpdated", (data) => {
+      notificar(`Cambio detectado: ${JSON.stringify(data)}`);
+      cargarLenguajes(); // actualizar al recibir cambio
+    });
+
+    socket.on("disconnect", () => {
+      notificar("Desconectado del servidor");
+    });
+  </script>
+</body>
+</html>

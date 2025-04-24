@@ -1,0 +1,15 @@
+Content-Type text/xml
+SOAPAction getFilmsByCategory
+
+
+BODY -> RAW -> XML
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:sak="http://www.examples.com/sakila">
+  <soapenv:Header/>
+  <soapenv:Body>
+    <sak:getFilmsByCategory>
+      <category>Action</category>
+    </sak:getFilmsByCategory>
+  </soapenv:Body>
+</soapenv:Envelope>

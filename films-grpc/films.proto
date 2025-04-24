@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package films;
+
+service FilmService {
+  rpc GetFilms (Empty) returns (FilmsList);
+}
+
+message Empty {}
+
+message Film {
+  int32 film_id = 1;
+  string title = 2;
+  string description = 3;
+  int32 release_year = 4;
+  string language = 5;
+}
+
+message FilmsList {
+  repeated Film films = 1;
+}
